@@ -1,0 +1,82 @@
+<template>
+  <div class="container-fluid mb-5">
+    <div class="row">
+      <div class="col-8 mx-auto">
+        <div class="d-flex align-items-center mt-e mb-3">
+          <MainLogo
+            width="20%"
+            height="20%"
+            viewBox="0 0 850 350"
+            preserveAspectRatio="none"
+            class="mt-3"
+          />
+          <span class="fs-1">공지사항</span>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>제목</th>
+              <th>날짜</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>긴급 공지사항 입니다.</td>
+              <td>2022-03-06</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>긴급 공지사항 입니다.</td>
+              <td>2022-03-06</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>긴급 공지사항 입니다.</td>
+              <td>2022-03-06</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>긴급 공지사항 입니다.</td>
+              <td>2022-03-06</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>긴급 공지사항 입니다.</td>
+              <td>2022-03-06</td>
+            </tr>
+          </tbody>
+        </table>
+        <nav aria-label="Page navigation example" class="p-0">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active">
+              <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "NoticeView",
+  setup() {},
+};
+</script>
+
+<style></style>
