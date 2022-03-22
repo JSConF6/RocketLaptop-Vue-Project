@@ -1,7 +1,7 @@
 .DS_Store
 node_modules
 /dist
-src/assets/imgFiles/
+src/assets/imgFiles/upload/
 
 # local env files
 .env.local
