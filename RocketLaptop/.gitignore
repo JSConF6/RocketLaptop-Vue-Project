@@ -5,6 +5,7 @@ target/
 .project
 
 frontend/node_modules/
+frontend/src/assets/imgFiles
 
 ### Eclipse ###
 .metadata
