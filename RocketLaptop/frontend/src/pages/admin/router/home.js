@@ -5,6 +5,8 @@ import adminProductListView from "@/pages/admin/views/adminProductListView";
 import adminQuestionListView from "@/pages/admin/views/adminQuestionListView";
 import adminUserListView from "@/pages/admin/views/adminUserListView";
 import adminProductAddView from "@/pages/admin/views/adminProductAddView";
+import adminProductDetailView from "@/pages/admin/views/adminProductDetailView";
+import adminProducModifyView from "@/pages/admin/views/adminProductModifyView";
 
 export const HomeRouters = [
   {
@@ -38,9 +40,21 @@ export const HomeRouters = [
     meta: { title: "RocketLaptop - 관리자페이지" },
   },
   {
+    path: "/admin/product/detail/:product_code",
+    name: "adminProductDetailView",
+    component: adminProductDetailView,
+    meta: { title: "RocketLaptop - 관리자페이지" },
+  },
+  {
     path: "/admin/product/add",
     name: "adminProductAddView",
     component: adminProductAddView,
+    meta: { title: "RocketLaptop - 관리자페이지" },
+  },
+  {
+    path: "/admin/product/modify/:product_code",
+    name: "adminProducModifyView",
+    component: adminProducModifyView,
     meta: { title: "RocketLaptop - 관리자페이지" },
   },
   {

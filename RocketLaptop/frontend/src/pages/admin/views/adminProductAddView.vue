@@ -229,6 +229,7 @@ export default {
     });
 
     const image_upload = reactive([]);
+    const image_type = reactive([]);
 
     const thumbnail_remove = ref(false);
     const image1_remove = ref(false);
@@ -257,6 +258,7 @@ export default {
         if (imgCheck(event.target.files[0], 0)) {
           img_name.thumbnail_name = event.target.files[0].name;
           thumbnail_remove.value = true;
+          image_type[0] = `${event.target.files[0].name}/1`;
         } else {
           thumbnail_upload.value.value = "";
         }
@@ -264,6 +266,7 @@ export default {
         if (imgCheck(event.target.files[0], 1)) {
           img_name.image1_name = event.target.files[0].name;
           image1_remove.value = true;
+          image_type[1] = `${event.target.files[0].name}/2`;
         } else {
           image1_upload.value.value = "";
         }
@@ -271,6 +274,7 @@ export default {
         if (imgCheck(event.target.files[0], 2)) {
           img_name.image2_name = event.target.files[0].name;
           image2_remove.value = true;
+          image_type[2] = `${event.target.files[0].name}/2`;
         } else {
           image2_upload.value.value = "";
         }
@@ -278,6 +282,7 @@ export default {
         if (imgCheck(event.target.files[0], 3)) {
           img_name.image3_name = event.target.files[0].name;
           image3_remove.value = true;
+          image_type[3] = `${event.target.files[0].name}/2`;
         } else {
           image3_upload.value.value = "";
         }
@@ -285,6 +290,7 @@ export default {
         if (imgCheck(event.target.files[0], 4)) {
           img_name.details_name = event.target.files[0].name;
           details_remove.value = true;
+          image_type[4] = `${event.target.files[0].name}/3`;
         } else {
           details_upload.value.value = "";
         }
@@ -320,6 +326,7 @@ export default {
     function imgCheck(file, num) {
       let pattern = /(gif|jpg|jpeg|png)$/i;
       if (pattern.test(file.name)) {
+        console.log(file);
         image_upload[num] = file;
         return true;
       } else {
@@ -365,26 +372,31 @@ export default {
     function imgRemove(type) {
       if (type === "thumbnail") {
         image_upload[0] = "";
+        image_type[0] = {};
         img_name.thumbnail_name = "";
         thumbnail_upload.value.value = "";
         thumbnail_remove.value = false;
       } else if (type === "image1") {
         image_upload[1] = "";
+        image_type[1] = {};
         img_name.image1_name = "";
         image1_upload.value.value = "";
         image1_remove.value = false;
       } else if (type === "image2") {
         image_upload[2] = "";
+        image_type[2] = {};
         img_name.image2_name = "";
         image2_upload.value.value = "";
         image2_remove.value = false;
       } else if (type === "image3") {
         image_upload[3] = "";
+        image_type[3] = {};
         img_name.image3_name = "";
         image3_upload.value.value = "";
         image3_remove.value = false;
       } else if (type === "details") {
         image_upload[4] = "";
+        image_type[4] = {};
         img_name.details_name = "";
         details_upload.value.value = "";
         details_remove.value = false;
@@ -413,7 +425,7 @@ export default {
           text: "상품 가격을 입력해주세요",
           allowOutsideClick: false,
         });
-      } else if (image_upload[0] === "") {
+      } else if (image_upload[0] === undefined) {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -421,9 +433,9 @@ export default {
           allowOutsideClick: false,
         });
       } else if (
-        image_upload[1] === "" &&
-        image_upload[2] === "" &&
-        image_upload === ""
+        image_upload[1] === undefined &&
+        image_upload[2] === undefined &&
+        image_upload[3] === undefined
       ) {
         Swal.fire({
           icon: "warning",
@@ -431,7 +443,7 @@ export default {
           text: "상품 이미지 하나 이상 첨부해주세요.",
           allowOutsideClick: false,
         });
-      } else if (image_upload[4] === "") {
+      } else if (image_upload[4] === undefined) {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -445,8 +457,9 @@ export default {
 
         for (let i = 0; i < image_upload.length; i++) {
           frm.append("image_upload", image_upload[i]);
+          console.log(image_type[i]);
         }
-
+        frm.append("image_type", image_type);
         frm.append("product_code", product.product_code);
         frm.append("category_code", product.category_code);
         frm.append("product_name", product.product_name);

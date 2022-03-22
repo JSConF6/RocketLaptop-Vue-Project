@@ -20,13 +20,13 @@
         v-show="listCount > 0"
         class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-2 g-4"
       >
-        <div class="col-6" v-for="(item, index) in productList" :key="index">
+        <div class="col-6" v-for="(product, index) in productList" :key="index">
           <div class="card mb-3">
             <div class="row g-0">
               <div class="col-md-4">
                 <img
                   :src="
-                    require(`@/assets/imgFiles/upload${item.product_img_name}`)
+                    require(`@/assets/imgFiles/upload${product.product_img_name}`)
                   "
                   class="img-fluid rounded-start w-100 h-100"
                 />
@@ -36,20 +36,26 @@
                   class="card-body w-100 h-100 d-flex flex-column justify-content-center"
                 >
                   <h3 class="card-title mt-3 mb-3 product-title">
-                    <router-link to="#">{{ item.product_name }}</router-link>
+                    <router-link to="#">{{ product.product_name }}</router-link>
                   </h3>
                   <p class="card-text">
                     카테고리 : <span class="badge bg-dark">노트북</span>&nbsp;
-                    <span class="badge bg-dark">{{ item.category_name }} </span>
+                    <span class="badge bg-dark"
+                      >{{ product.category_name }}
+                    </span>
                   </p>
                   <p class="card-text">
-                    상품가격 : {{ item.product_price }} 원
+                    상품가격 : {{ product.product_price }} 원
                   </p>
                   <p class="card-text">
-                    상품 등록일 : {{ item.product_reg_date }}
+                    상품 등록일 : {{ product.product_reg_date }}
                   </p>
                   <p class="card-text text-end">
-                    <a class="btn btn-primary" href="#">상세보기</a>
+                    <router-link
+                      class="btn btn-primary"
+                      :to="`/admin/product/detail/${product.product_code}`"
+                      >상세보기</router-link
+                    >
                   </p>
                 </div>
               </div>
