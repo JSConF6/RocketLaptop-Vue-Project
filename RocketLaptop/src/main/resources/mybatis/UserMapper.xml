@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rocket.laptop.repository.UserMapper">
+
+	<select id="findById" parameterType="String" resultType="UserDto">
+		select * from user where user_id = #{user_id}
+	</select>
+	
+	<insert id="save" parameterType="UserDto">
+		insert into user (user_id, user_name, user_password, user_email, user_birth, user_phone, user_gender, user_role)
+		values (#{user_id}, #{user_name}, #{user_password}, #{user_email}, #{user_birth}, #{user_phone}, #{user_gender}, #{user_role})
+	</insert>
+
+</mapper>
