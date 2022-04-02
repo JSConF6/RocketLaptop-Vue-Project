@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,11 +28,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.rocket.laptop.model.FileDto;
+import com.rocket.laptop.model.ImageTypeDto;
 import com.rocket.laptop.model.PageHandler;
 import com.rocket.laptop.model.ProductDetailDto;
 import com.rocket.laptop.model.ProductDto;
 import com.rocket.laptop.model.ProductListDto;
-import com.rocket.laptop.model.imageTypeDto;
 import com.rocket.laptop.model.response.Response;
 import com.rocket.laptop.service.FileService;
 import com.rocket.laptop.service.ProductService;
@@ -132,39 +133,36 @@ public class adminProductController {
 	
 	@PostMapping("/add")
 	public ResponseEntity<Response> adminProductAdd(ProductDto productDto,
-			@RequestParam("image_upload") List<MultipartFile> multipartFiles, @RequestParam("image_type") String[] typeList) throws Exception{
+			@RequestParam("images") List<MultipartFile> multipartFiles, @RequestPart("image_type") List<ImageTypeDto> imageTypeList) throws Exception{
 		logger.info("상품등록");
-		productService.productAdd(productDto);
-		
+//		productService.productAdd(productDto);
+		System.out.println(imageTypeList);
 		for(int i = 0; i < multipartFiles.size(); i++) {
 			MultipartFile file = (MultipartFile) multipartFiles.get(i);
 			
-			if(file.isEmpty()) {
-				continue;
-			}
+			System.out.println(file.getOriginalFilename());
+			System.out.println(imageTypeList);
 			
-			FileDto fileDto = new FileDto();
-			
-			int type = typeSearch(typeList, file.getOriginalFilename());
-			
-			if(type != 0) {
-				fileDto.setProduct_img_type(type);
-			}
-			
-			String originalFileName = file.getOriginalFilename(); // 오리지날 파일명
-			logger.info("오리지날 파일명 : " + originalFileName);
-			
-			fileDto.setProduct_img_original_name(originalFileName);
-			
-			fileDto.setProduct_code(productDto.getProduct_code());
-			
-			String fileDBName = fileDBName(originalFileName, saveFolder);
-			
-			file.transferTo(new File(saveFolder + fileDBName));
-			
-			fileDto.setProduct_img_name(fileDBName);
-			
-			fileService.fileAdd(fileDto);
+//			if(file.isEmpty()) {
+//				continue;
+//			}
+//			
+//			FileDto fileDto = new FileDto();
+//			
+//			String originalFileName = file.getOriginalFilename(); // 오리지날 파일명
+//			logger.info("오리지날 파일명 : " + originalFileName);
+//			
+//			fileDto.setProduct_img_original_name(originalFileName);
+//			
+//			fileDto.setProduct_code(productDto.getProduct_code());
+//			
+//			String fileDBName = fileDBName(originalFileName, saveFolder);
+//			
+//			file.transferTo(new File(saveFolder + fileDBName));
+//			
+//			fileDto.setProduct_img_name(fileDBName);
+//			
+//			fileService.fileAdd(fileDto);
 		}
 		
 		return ResponseEntity.ok(
@@ -172,20 +170,6 @@ public class adminProductController {
 				.status(HttpStatus.OK.value())
 				.message("상품 등록 성공")
 				.build());
-	}
-	
-	private int typeSearch(String[] imageTypeList, String originalName) {
-		for(String imageType : imageTypeList) {
-			String[] typeList = imageType.split("/");
-			for(int i = 0; i < typeList.length; i++) {
-				System.out.println(typeList[i]);
-				if(typeList[i].equals(originalName)) {
-					return Integer.parseInt(typeList[1]);
-				}
-			}
-		}
-		
-		return 0;
 	}
 	
 	private String fileDBName(String originalFileName, String saveFolder) {
