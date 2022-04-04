@@ -56,6 +56,16 @@
               v-model="productDetail.product_price"
             />
           </div>
+          <div class="mb-3">
+            <label for="productRegDate" class="form-label">상품등록일</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productRegDate"
+              :value="productRegDate(productDetail.product_reg_date)"
+              disabled
+            />
+          </div>
           <div
             v-for="(imgFile, index) in imgFiles"
             :key="index"
@@ -101,7 +111,7 @@
 </template>
 
 <script>
-import { onBeforeUpdate, ref } from "vue";
+import { inject, onBeforeUpdate, ref } from "vue";
 import Swal from "sweetalert2";
 import axios from "@/axios/axiosSetting";
 import { useRouter, useRoute } from "vue-router";
@@ -126,6 +136,8 @@ export default {
     let original_name = ref("");
 
     let check = ref([]);
+
+    const productRegDate = inject("productRegDate");
 
     const upload = (index, event) => {
       let imgSize = event.target.files[0].size;
@@ -372,6 +384,7 @@ export default {
       productDetail,
       imgFiles,
       original_name,
+      productRegDate,
     };
   },
 };

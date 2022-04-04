@@ -45,10 +45,10 @@
                     </span>
                   </p>
                   <p class="card-text">
-                    상품가격 : {{ product.product_price }} 원
+                    상품가격 : {{ priceComma(product.product_price) }} 원
                   </p>
                   <p class="card-text">
-                    상품 등록일 : {{ product.product_reg_date }}
+                    상품 등록일 : {{ productRegDate(product.product_reg_date) }}
                   </p>
                   <p class="card-text text-end">
                     <router-link
@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import { inject } from "vue";
+
 export default {
   name: "adminProductList",
 
@@ -85,7 +87,15 @@ export default {
     },
   },
 
-  setup() {},
+  setup() {
+    const priceComma = inject("priceComma");
+    const productRegDate = inject("productRegDate");
+
+    return {
+      priceComma,
+      productRegDate,
+    };
+  },
 };
 </script>
 

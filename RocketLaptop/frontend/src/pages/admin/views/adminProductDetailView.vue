@@ -46,7 +46,17 @@
               type="text"
               class="form-control"
               id="productPrice"
-              :value="productDetail.product_price"
+              :value="priceComma(productDetail.product_price)"
+              disabled
+            />
+          </div>
+          <div class="mb-3">
+            <label for="productRegDate" class="form-label">상품등록일</label>
+            <input
+              type="text"
+              class="form-control"
+              id="productRegDate"
+              :value="productRegDate(productDetail.product_reg_date)"
               disabled
             />
           </div>
@@ -101,7 +111,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { useRoute } from "vue-router";
 import axios from "@/axios/axiosSetting";
 import Swal from "sweetalert2";
@@ -117,6 +127,9 @@ export default {
     let original_name = ref("");
 
     const product_code = useRoute().params.product_code;
+
+    const priceComma = inject("priceComma");
+    const productRegDate = inject("productRegDate");
 
     const product_detail = async () => {
       const res = await axios.get(`/api/admin/product/detail/${product_code}`);
@@ -200,6 +213,8 @@ export default {
       productListBtn,
       productDeleteBtn,
       original_name,
+      priceComma,
+      productRegDate,
     };
   },
 };
