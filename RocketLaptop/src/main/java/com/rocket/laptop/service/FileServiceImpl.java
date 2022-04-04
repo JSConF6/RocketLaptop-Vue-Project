@@ -36,4 +36,14 @@ public class FileServiceImpl implements FileService {
 		return fileMapper.getProductFile(product_code);
 	}
 
+	@Override
+	public void fileModify(FileDto fileDto, String product_code) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("fileDto", fileDto);
+		map.put("product_code", product_code);
+		
+		fileMapper.fileModify(map);
+	}
+
 }

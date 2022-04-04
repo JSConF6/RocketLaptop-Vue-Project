@@ -211,7 +211,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (product.product_name === "") {
+      }
+
+      if (product.product_name === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -219,7 +221,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (product.product_price === "") {
+      }
+
+      if (product.product_price === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -227,7 +231,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[0] === undefined || images.value[0] === "") {
+      }
+
+      if (images.value[0] === undefined || images.value[0] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -235,7 +241,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[1] === undefined || images.value[1] === "") {
+      }
+
+      if (images.value[1] === undefined || images.value[1] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -243,7 +251,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[2] === undefined || images.value[2] === "") {
+      }
+
+      if (images.value[2] === undefined || images.value[2] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -251,7 +261,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[3] === undefined || images.value[3] === "") {
+      }
+
+      if (images.value[3] === undefined || images.value[3] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -259,7 +271,9 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[4] === undefined || images.value[4] === "") {
+      }
+
+      if (images.value[4] === undefined || images.value[4] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -291,18 +305,18 @@ export default {
             text: "상품등록 완료",
             allowOutsideClick: false,
           }).then(() => {
-            router.push({
+            router.replace({
               name: "adminProductListView",
             });
           });
         } else {
           Swal.fire({
-            icon: "success",
+            icon: "error",
             title: "상품등록",
             text: "상품등록 실패",
             allowOutsideClick: false,
           }).then(() => {
-            router.push({ name: "adminProductAddView" });
+            router.replace({ name: "adminProductAddView" });
           });
         }
       } catch (error) {

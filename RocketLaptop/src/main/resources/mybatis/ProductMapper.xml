@@ -38,5 +38,11 @@
 		delete from product
 		where product_code = #{product_code}
 	</delete>
+	
+	<update id="productModify" parameterType="ProductDto">
+		update product
+		set product_name = #{product_name}, product_price = #{product_price}
+		where product_code = #{product_code}
+	</update>
 
 </mapper>

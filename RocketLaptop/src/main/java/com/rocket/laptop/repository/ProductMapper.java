@@ -22,4 +22,6 @@ public interface ProductMapper {
 	public ProductDetailDto getProductDetail(String product_code);
 	
 	public int productDelete(String product_code);
+
+	public void productModify(ProductDto productDto);
 }

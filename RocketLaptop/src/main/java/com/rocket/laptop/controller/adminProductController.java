@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,6 +112,71 @@ public class adminProductController {
 		}
 
 		return new ResponseDto<String> (HttpStatus.BAD_REQUEST.value(), "상품 삭제 실패");
+	}
+	
+	@PostMapping("/modify/{product_code}")
+	public ResponseDto<String> adminProductModify(ProductDto productDto,
+			@RequestParam(value = "images", required = false) List<MultipartFile> multipartFiles,
+			@RequestPart("image_type") String imageTypeList) {
+		logger.info("상품수정");
+		productService.productModify(productDto);
+		
+		if(CollectionUtils.isEmpty(multipartFiles)) {
+			logger.info("기존 파일 5개 그대로 사용");
+			return new ResponseDto<String>(HttpStatus.OK.value(), "상품 수정 성공");
+		}else {
+			logger.info("파일이 하나라도 수정");
+			
+			ObjectMapper om = new ObjectMapper();
+
+			try {
+				
+				List<ImageTypeDto> imageTypeDtos = om.readValue(imageTypeList, new TypeReference<List<ImageTypeDto>>() {
+				});
+				System.out.println(imageTypeDtos);
+				for (int i = 0; i < multipartFiles.size(); i++) {
+					MultipartFile file = (MultipartFile) multipartFiles.get(i);
+
+					FileDto fileDto = new FileDto();
+	
+					String originalFileName = file.getOriginalFilename(); // 오리지날 파일명
+					logger.info("오리지날 파일명 : " + originalFileName);
+	
+					fileDto.setProduct_img_original_name(originalFileName);
+	
+					for (ImageTypeDto imageTypeDto : imageTypeDtos) {
+						if(imageTypeDto == null) {
+							continue;
+						}
+						
+						if (imageTypeDto.getImage_name().equals(originalFileName)) {
+							fileDto.setProduct_img_type(imageTypeDto.getImage_type());
+							fileDto.setProduct_img_num(imageTypeDto.getImage_num());
+						}
+					}
+	
+					fileDto.setProduct_code(productDto.getProduct_code());
+	
+					String fileDBName = fileDBName(originalFileName, saveFolder);
+	
+					file.transferTo(new File(saveFolder + fileDBName));
+	
+					fileDto.setProduct_img_name(fileDBName);
+	
+					fileService.fileModify(fileDto, productDto.getProduct_code());
+				}
+			} catch (Exception e) {
+				ProductDetailDto productDetailDto = productService.getProductDetail(productDto.getProduct_code());
+				
+				if(productDetailDto != null) {
+					productService.productDelete(productDto.getProduct_code());
+				}
+				
+				return new ResponseDto<String>(HttpStatus.BAD_REQUEST.value(), "상품 등록 실패");
+			}
+		}
+
+		return new ResponseDto<String>(HttpStatus.OK.value(), "상품 등록 성공");
 	}
 
 	@PostMapping("/add")

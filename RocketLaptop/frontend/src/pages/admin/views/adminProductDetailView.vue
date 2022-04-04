@@ -145,7 +145,7 @@ export default {
 
     const productListBtn = (event) => {
       event.preventDefault();
-      router.go(-1);
+      router.push("/admin/product/list");
     };
 
     const productDeleteBtn = (event) => {
