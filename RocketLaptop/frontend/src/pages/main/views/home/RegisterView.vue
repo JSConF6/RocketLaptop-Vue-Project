@@ -294,7 +294,7 @@ export default {
             router.push({
               name: "LoginView",
             });
-          } else if (res.data.statis === 400) {
+          } else {
             Swal.fire({
               icon: "error",
               title: "회원가입",

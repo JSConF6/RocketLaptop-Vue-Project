@@ -55,32 +55,36 @@
               v-model="product.product_price"
             />
           </div>
-          <div v-for="num in 5" :key="num" class="mb-3 img-container">
-            <label :for="`imageFile${num}`" class="form-label fs-4">
+          <div
+            v-for="(num, index) in 5"
+            :key="index"
+            class="mb-3 img-container"
+          >
+            <label :for="`imageFile${index}`" class="form-label fs-4">
               <span v-if="num == 1">대표이미지</span>
               <span v-if="num == 2 || num == 3 || num == 4">이미지</span>
               <span v-if="num == 5">상세설명</span><br />
               <span class="btn btn-primary me-2">이미지 첨부</span>
               <input
                 class="form-control"
-                :id="`imageFile${num}`"
+                :id="`imageFile${index}`"
                 type="file"
                 :ref="
                   (el) => {
-                    if (el) image_file[num] = el;
+                    if (el) image_file[index] = el;
                   }
                 "
                 accept="image/*"
-                @change="upload(num, $event)"
+                @change="upload(index, $event)"
               />
             </label>
-            <span>{{ image_value[num] }}</span>
+            <span>{{ image_value[index] }}</span>
             <img
               src="@/assets/imgFiles/image/remove.png"
               alt="이미지삭제"
               class="image_remove"
-              v-show="show[num]"
-              @click="remove(num)"
+              v-show="show[index]"
+              @click="remove(index)"
             />
           </div>
           <div class="d-flex justify-content-end mb-3">
@@ -122,35 +126,35 @@ export default {
 
     const image_type = ref([]);
 
-    const upload = (num, event) => {
+    const upload = (index, event) => {
       let imgSize = event.target.files[0].size;
 
       if (!imgSizeCheck(imgSize)) {
-        image_file.value[num].value = "";
+        image_file.value[index].value = "";
         return false;
       }
 
-      if (imgCheck(event.target.files[0], num)) {
-        image_value.value[num] = event.target.files[0].name;
-        show.value[num] = true;
-        if (num == 1) {
-          image_type.value[num] = {
+      if (imgCheck(event.target.files[0], index)) {
+        image_value.value[index] = event.target.files[0].name;
+        show.value[index] = true;
+        if (index + 1 == 1) {
+          image_type.value[index] = {
             image_name: event.target.files[0].name,
             image_type: 1,
           };
-        } else if (num == 2 || num == 3 || num == 4) {
-          image_type.value[num] = {
+        } else if (index + 1 == 2 || index + 1 == 3 || index + 1 == 4) {
+          image_type.value[index] = {
             image_name: event.target.files[0].name,
             image_type: 2,
           };
-        } else if (num == 5) {
-          image_type.value[num] = {
+        } else if (index + 1 == 5) {
+          image_type.value[index] = {
             image_name: event.target.files[0].name,
             image_type: 3,
           };
         }
       } else {
-        image_file.value[num].value = "";
+        image_file.value[index].value = "";
       }
     };
 
@@ -168,11 +172,11 @@ export default {
       return true;
     }
 
-    function imgCheck(file, num) {
+    function imgCheck(file, index) {
       let pattern = /(gif|jpg|jpeg|png)$/i;
       if (pattern.test(file.name)) {
         console.log(file);
-        images.value[num] = file;
+        images.value[index] = file;
         return true;
       } else {
         Swal.fire({
@@ -185,13 +189,13 @@ export default {
       }
     }
 
-    const remove = (num) => {
-      console.log(num);
-      image_value.value[num] = "";
-      images.value[num] = "";
-      show.value[num] = false;
-      image_file.value[num].value = "";
-      image_type[num] = {};
+    const remove = (index) => {
+      console.log(index);
+      image_value.value[index] = "";
+      images.value[index] = "";
+      show.value[index] = false;
+      image_file.value[index].value = "";
+      image_type[index] = {};
     };
 
     onBeforeUpdate(() => {
@@ -223,11 +227,19 @@ export default {
           allowOutsideClick: false,
         });
         return false;
-      } else if (images.value[1] === undefined || images.value[1] === "") {
+      } else if (images.value[0] === undefined || images.value[0] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
           text: "대표 이미지를 첨부해주세요.",
+          allowOutsideClick: false,
+        });
+        return false;
+      } else if (images.value[1] === undefined || images.value[1] === "") {
+        Swal.fire({
+          icon: "warning",
+          title: "상품등록",
+          text: "이미지를 첨부해주세요.",
           allowOutsideClick: false,
         });
         return false;
@@ -248,14 +260,6 @@ export default {
         });
         return false;
       } else if (images.value[4] === undefined || images.value[4] === "") {
-        Swal.fire({
-          icon: "warning",
-          title: "상품등록",
-          text: "이미지를 첨부해주세요.",
-          allowOutsideClick: false,
-        });
-        return false;
-      } else if (images.value[5] === undefined || images.value[5] === "") {
         Swal.fire({
           icon: "warning",
           title: "상품등록",
@@ -281,9 +285,24 @@ export default {
           headers: { "Content-Type": "multipart/form-data;charset=UTF-8" },
         });
         if (res.data.status === 200) {
-          router.push({
-            name: "adminProductListView",
-            params: { page: "productAdd" },
+          Swal.fire({
+            icon: "success",
+            title: "상품등록",
+            text: "상품등록 완료",
+            allowOutsideClick: false,
+          }).then(() => {
+            router.push({
+              name: "adminProductListView",
+            });
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "상품등록",
+            text: "상품등록 실패",
+            allowOutsideClick: false,
+          }).then(() => {
+            router.push({ name: "adminProductAddView" });
           });
         }
       } catch (error) {
@@ -295,8 +314,8 @@ export default {
 
     const getCategoryList = async () => {
       const res = await axios.get("/api/admin/category/list");
-      for (let i = 0; i < res.data.body.categoryList.length; i++) {
-        categoryList[i] = res.data.body.categoryList[i];
+      for (let i = 0; i < res.data.data.categoryList.length; i++) {
+        categoryList[i] = res.data.data.categoryList[i];
       }
       product.category_code = categoryList[0].category_code;
     };

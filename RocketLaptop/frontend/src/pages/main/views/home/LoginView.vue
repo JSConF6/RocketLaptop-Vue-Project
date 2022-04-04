@@ -115,9 +115,10 @@ export default {
           } else {
             cookies.remove("saveid");
           }
-          store.dispatch("userStore/login", res.data.body);
+          console.log(res.data);
+          store.dispatch("userStore/login", res.data.data);
           router.push({ name: "MainView" });
-        } else if (res.data.status === 401) {
+        } else {
           Swal.fire({
             icon: "error",
             title: "로그인",

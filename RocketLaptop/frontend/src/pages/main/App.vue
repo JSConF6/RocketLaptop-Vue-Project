@@ -34,9 +34,10 @@ export default {
       } else {
         try {
           const res = await axios.get("/api/getSession");
+          console.log(res.data);
           if (res.data.status === 200) {
-            store.dispatch("userStore/login", res.data.body);
-          } else if (res.data.status === 401) {
+            store.dispatch("userStore/login", res.data.data);
+          } else {
             console.log("사용자 정보 조회 실패");
             Swal.fire({
               icon: "error",

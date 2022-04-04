@@ -33,7 +33,7 @@ import com.rocket.laptop.model.FileDto;
 import com.rocket.laptop.model.PageHandler;
 import com.rocket.laptop.model.ProductDto;
 import com.rocket.laptop.model.ProductListDto;
-import com.rocket.laptop.model.response.Response;
+import com.rocket.laptop.model.ResponseDto;
 import com.rocket.laptop.service.CategoryService;
 import com.rocket.laptop.service.FileService;
 import com.rocket.laptop.service.ProductService;
@@ -50,27 +50,17 @@ public class adminController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@Autowired
-	private ProductService productService;
-	
-	@Autowired
-	private FileService fileService;
-	
 	@GetMapping("/category/list")
-	public ResponseEntity<Response> adminProductAddView() {
+	public ResponseDto<Map<String, Object>> adminProductAddView() {
 		logger.info("카테고리 리스트 가져오기");
 		
 		List<CategoryDto> categoryList = categoryService.getAllCategory();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("categoryList", categoryList);
+		map.put("message", "카테고리 가져오기 성공");
 		
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("카테고리 리스트 가져오기 성공")
-				.body(map)
-				.build());
+		return new ResponseDto<Map<String, Object>> (HttpStatus.OK.value(), map);
 	}
 	
 }

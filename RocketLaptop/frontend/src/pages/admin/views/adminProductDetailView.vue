@@ -122,8 +122,8 @@ export default {
       const res = await axios.get(`/api/admin/product/detail/${product_code}`);
       if (res.data.status === 200) {
         console.log(res);
-        productDetail.value = res.data.body.productDetail;
-        imgFiles.value = res.data.body.fileList;
+        productDetail.value = res.data.data.productDetail;
+        imgFiles.value = res.data.data.fileList;
         for (let i = 0; i < imgFiles.value.length; i++) {
           if (imgFiles.value[i].product_img_type === 3) {
             original_name.value = imgFiles.value[i].product_img_original_name;

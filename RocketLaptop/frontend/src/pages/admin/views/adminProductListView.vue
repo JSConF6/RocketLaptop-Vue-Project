@@ -9,16 +9,11 @@ import ProductList from "@/components/admin/adminProductList.vue";
 import Paging from "@/components/paging.vue";
 import { ref } from "vue";
 import axios from "@/axios/axiosSetting";
-import { useRouter, useRoute } from "vue-router";
-import Swal from "sweetalert2";
 
 export default {
   name: "adminProductListView",
   components: { ProductList, Paging },
   setup() {
-    const router = useRouter();
-    const page = useRoute().params.page;
-
     const productList = ref([]);
     let limit = 4;
     let listCount = ref(0);
@@ -32,14 +27,14 @@ export default {
           `/api/admin/product/list?page=${page}&limit=${limit}`
         );
         console.log(res.data);
-        productList.value = res.data.body.productList;
-        listCount.value = res.data.body.pageHandler.listCount;
-        pageHandler.value = res.data.body.pageHandler;
+        productList.value = res.data.data.productList;
+        listCount.value = res.data.data.pageHandler.listCount;
+        pageHandler.value = res.data.data.pageHandler;
 
         pageList.value = [];
         for (
-          let i = res.data.body.pageHandler.startPage;
-          i <= res.data.body.pageHandler.endPage;
+          let i = res.data.data.pageHandler.startPage;
+          i <= res.data.data.pageHandler.endPage;
           i++
         ) {
           pageList.value.push(i);
@@ -49,18 +44,6 @@ export default {
       }
     };
     getList();
-
-    if (page === "productAdd") {
-      console.log("PreviousPage : " + page);
-      Swal.fire({
-        icon: "success",
-        title: "상품등록",
-        text: "상품등록 완료",
-        allowOutsideClick: false,
-      }).then(() => {
-        router.go();
-      });
-    }
 
     return {
       getList,

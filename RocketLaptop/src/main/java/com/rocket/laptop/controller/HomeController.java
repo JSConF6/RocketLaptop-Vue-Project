@@ -32,8 +32,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rocket.laptop.config.auth.PrincipalDetails;
+import com.rocket.laptop.model.ResponseDto;
 import com.rocket.laptop.model.UserDto;
-import com.rocket.laptop.model.response.Response;
 import com.rocket.laptop.service.UserService;
 
 @RestController
@@ -52,66 +52,47 @@ public class HomeController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<Response> register(@RequestBody UserDto userDto){
+	public ResponseDto<String> register(@RequestBody UserDto userDto){
 		logger.info("회원가입 시작");
 		
 		int result = userService.register(userDto);
 		
 		if(result != 1) {
-			return ResponseEntity.ok(
-					Response.builder()
-					.status(HttpStatus.BAD_REQUEST.value())
-					.message("회원가입 실패")
-					.build());
+			return new ResponseDto<String> (HttpStatus.BAD_REQUEST.value(), "회원가입 실패");
 		}
 		
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("회원가입 성공")
-				.build());
+		return new ResponseDto<String> (HttpStatus.OK.value(), "회원가입 성공");
 	}
 	
 	@GetMapping("/getSession")
-	public ResponseEntity<Response> getSession(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public ResponseDto<Map<String, Object>> getSession(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		logger.info("세션값 가져오기");
 		System.out.println(principalDetails);
 		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		if(principalDetails == null) {
-			return ResponseEntity.ok(
-					Response.builder()
-					.status(HttpStatus.UNAUTHORIZED.value())
-					.message("사용자 정보 가져오기 실패")
-					.build());
+			map.put("message", "사용자 정보 가져오기 실패");
+			return new ResponseDto<Map<String, Object>> (HttpStatus.OK.value(), map);
 		}
 		
 		UserDto userDto = principalDetails.getUserDto();
 		
-		Map<String, Object> user = new HashMap<String, Object>();
-		user.put("user_id", userDto.getUser_id());
-		user.put("user_role", userDto.getUser_role());
-		user.put("user_name", userDto.getUser_name());
+		map.put("user_id", userDto.getUser_id());
+		map.put("user_role", userDto.getUser_role());
+		map.put("user_name", userDto.getUser_name());
 		
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("사용자 정보 가져오기 성공")
-				.body(user)
-				.build());
+		return new ResponseDto<Map<String, Object>> (HttpStatus.OK.value(), map);
 	}
 	
 	@GetMapping("/logoutSuccess")
-	public ResponseEntity<Response> logoutSuccess() {
+	public ResponseDto<String> logoutSuccess() {
 		logger.info("로그아웃 성공");
-		return ResponseEntity.ok((
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("로그아웃 성공")
-				.build()));
+		return new ResponseDto<String> (HttpStatus.OK.value(), "로그아웃 성공");
 	}
 	
 	@GetMapping("/loginSuccess")
-	public ResponseEntity<Response> loginSuccess(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public ResponseDto<Map<String, Object>> loginSuccess(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 		logger.info("로그인 성공");
 		
 		UserDto userDto = principalDetails.getUserDto();
@@ -120,42 +101,26 @@ public class HomeController {
 		user.put("user_id", userDto.getUser_id());
 		user.put("user_role", userDto.getUser_role());
 		user.put("user_name", userDto.getUser_name());
+		user.put("message", "로그인 성공");
 		
-		return ResponseEntity.ok((
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("로그인 성공")
-				.body(user)
-				.build()));
+		return new ResponseDto<Map<String, Object>> (HttpStatus.OK.value(), user);
 	}
 	
 	@GetMapping("/loginFail")
-	public ResponseEntity<Response> loginFail() {
+	public ResponseDto<String> loginFail() {
 		logger.info("로그인 실패");
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.UNAUTHORIZED.value())
-				.message("로그인 실패")
-				.build());
+		return new ResponseDto<String>(HttpStatus.UNAUTHORIZED.value(), "로그인 실패");
 	}
 	
 	@GetMapping("/accessDenied")
-	public ResponseEntity<Response> accessDenied() {
+	public ResponseDto<String> accessDenied() {
 		logger.info("권한 없이 페이지 접속");
 		
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.FORBIDDEN.value())
-				.message("권한이 없습니다.")
-				.build());
+		return new ResponseDto<String> (HttpStatus.FORBIDDEN.value(), "권한이 없습니다.");
 	}
 	
 	@GetMapping("/admin/authorityCheck")
-	public ResponseEntity<Response> as(){
-		return ResponseEntity.ok(
-				Response.builder()
-				.status(HttpStatus.OK.value())
-				.message("해당 페이지의 권한이 있습니다.")
-				.build());
+	public ResponseDto<String> as(){
+		return new ResponseDto<String> (HttpStatus.OK.value(), "해당 페이지의 권한 있습니다.");
 	}
 }
