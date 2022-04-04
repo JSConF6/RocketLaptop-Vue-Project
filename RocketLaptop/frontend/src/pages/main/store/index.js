@@ -4,5 +4,9 @@ import { userStore } from "@/store/modules/userStore";
 
 export default createStore({
   modules: { userStore },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+    }),
+  ],
 });

@@ -12,8 +12,10 @@ export const userStore = {
       state.user_id = value.user_id;
       state.user_name = value.user_name;
       state.user_role = value.user_role;
+      console.log(state);
     },
     clearUser(state) {
+      console.log(state);
       state.user_id = "";
       state.user_name = "";
       state.user_role = "";
