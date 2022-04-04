@@ -54,6 +54,8 @@ export default {
       }
     };
 
+    sessionStorage.setItem("page", "home");
+
     return {
       getSession,
     };

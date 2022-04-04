@@ -19,7 +19,7 @@ export default {
     };
 
     const productRegDate = (date) => {
-      return date.substring(0, 10);
+      return String(date).substring(0, 10);
     };
 
     provide("priceComma", priceComma);

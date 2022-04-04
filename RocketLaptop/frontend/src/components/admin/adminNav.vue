@@ -20,9 +20,13 @@
         <li class="nav-item">
           <router-link
             to="/admin"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'home'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="home"
-            aria-current="page"
+            @click="setPageName('home')"
           >
             <font-awesome-icon icon="house" />&nbsp;&nbsp;대시보드
           </router-link>
@@ -30,8 +34,13 @@
         <li>
           <router-link
             to="/admin/notice/list"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'notice'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="notice"
+            @click="setPageName('notice')"
           >
             <font-awesome-icon icon="clipboard" />&nbsp;&nbsp;공지사항
           </router-link>
@@ -39,8 +48,13 @@
         <li>
           <router-link
             to="/admin/question/list"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'question'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="question"
+            @click="setPageName('question')"
           >
             <font-awesome-icon icon="question" />&nbsp;&nbsp;문의사항
           </router-link>
@@ -48,8 +62,13 @@
         <li>
           <router-link
             to="/admin/order/list"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'order'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="order"
+            @click="setPageName('order')"
           >
             <font-awesome-icon icon="calculator" />&nbsp;&nbsp;주문목록
           </router-link>
@@ -57,8 +76,13 @@
         <li>
           <router-link
             to="/admin/product/list"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'product'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="product"
+            @click="setPageName('product')"
           >
             <font-awesome-icon icon="boxes-stacked" />&nbsp;&nbsp;상품목록
           </router-link>
@@ -66,8 +90,13 @@
         <li>
           <router-link
             to="/admin/user/list"
-            class="nav-link link-dark fs-5 admin-link"
+            :class="
+              pageName === 'user'
+                ? 'active nav-link link-dark fs-5 admin-link'
+                : 'nav-link link-dark fs-5 admin-link'
+            "
             id="user"
+            @click="setPageName('user')"
           >
             <font-awesome-icon icon="circle-user" />&nbsp;&nbsp;유저목록
           </router-link>
@@ -97,9 +126,27 @@
 </template>
 
 <script>
+import { onBeforeMount, ref } from "vue";
+
 export default {
   name: "adminSidebarView",
-  setup() {},
+  setup() {
+    const pageName = ref("home");
+
+    onBeforeMount(() => {
+      pageName.value = sessionStorage.getItem("page");
+    });
+
+    const setPageName = (page) => {
+      pageName.value = page;
+      sessionStorage.setItem("page", pageName.value);
+    };
+
+    return {
+      pageName,
+      setPageName,
+    };
+  },
 };
 </script>
 
